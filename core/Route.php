@@ -15,7 +15,7 @@ class Route
 		$routes = explode('/', $routes);
 
 		// получаем имя контроллера
-		if (isset($routes[1]) and $routes[0] !== '' ) {
+		if (isset($routes[0])) {
 			$controller_name = $routes[0];
 		}
 		// получаем метод контроллера
