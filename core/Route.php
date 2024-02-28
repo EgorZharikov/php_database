@@ -7,14 +7,15 @@ class Route
 	public function start()
 	{
 		// контроллер и действие по умолчанию
-		$controller_name = 'Main';
+		$controller_name = 'main';
 		$action_name = 'index';
 		$routes = $_SERVER['REQUEST_URI'];
 		$routes = ltrim($routes, '/');
 		$routes = strtok($routes,'?');
 		$routes = explode('/', $routes);
+
 		// получаем имя контроллера
-		if (isset($routes[0])) {
+		if (isset($routes[1]) and $routes[0] !== '' ) {
 			$controller_name = $routes[0];
 		}
 		// получаем метод контроллера
@@ -38,7 +39,7 @@ class Route
 			include APP_PATH . "/app/Controllers/" . $controller_file;
 		} else {
 
-			// Route::ErrorPage404();
+			Route::ErrorPage404();
 		}
 		// создаем контроллер
 		$controller = new $controller_name;
@@ -49,7 +50,7 @@ class Route
 			$controller->$action();
 		} else {
 
-			// Route::ErrorPage404();
+			Route::ErrorPage404();
 		}
 	}
 	public static function ErrorPage404()
