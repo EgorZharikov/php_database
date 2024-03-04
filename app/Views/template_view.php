@@ -55,7 +55,7 @@ $collapse = 'collapse';
 </body>
 
 <footer>
-    <div class="container">
+    <div class="container position-absolute bottom-0 start-50 translate-middle-x">
         <div class="links">
             <a href="#">Контакты</a>
             <a href="#">О нас</a>

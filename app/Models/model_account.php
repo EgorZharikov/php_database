@@ -24,8 +24,9 @@ class Model_Account extends Model
             if (empty($fail)) {
                 $password = password_hash($password, PASSWORD_DEFAULT);
                 $db = new Db();
-                $sql = "INSERT INTO users (login, password) VALUES ('$username', '$password')";
-                $id = $db->insert($sql);
+                $params = ['username' => $username, 'password' => $password];
+                $sql = "INSERT INTO users (login, password) VALUES (:username, :password)";
+                $id = $db->insert($sql, $params);
                 $session = new Session();
                 $session->has('auth') ? $session->destroyAll() : false;
                 $session->start();
@@ -59,8 +60,9 @@ class Model_Account extends Model
             $username = Validator::test_input($_POST['username']);
             $password = Validator::test_input($_POST['password']);
             $db = new Db();
-            $sql = "SELECT id, password FROM users WHERE login = '$username'";
-            $data = $db->row($sql);
+            $params = ['username' => $username];
+            $sql = "SELECT id, password FROM users WHERE login = :username";
+            $data = $db->row($sql, $params);
             if ($data and password_verify($password, $data[0]['password'])) {
                 $session = new Session();
                 $session->start();

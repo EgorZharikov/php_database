@@ -1,7 +1,7 @@
 <?php $userID = $_SESSION['id'] ?? null; ?>
 <div class="container mb-3 mt-5">
 <div class="row align-items-center">
-<?php echo '<img src="'. APP_CONFIG['UPLOAD_DIR'] . '/' . $name . '"'. 'alt="Logo" class="d-inline-block align-text-top">'; ?>
+<?php echo '<img src="'. APP_CONFIG['UPLOAD_DIR_NAME'] . '/' . $name . '"'. 'alt="Logo" class="d-inline-block align-text-top">'; ?>
 <div class="m-1">Загрузил <?=$data->imgData[0]['login'];?> <?=date('m/d/Y H:i:s', $data->imgData[0]['timestamp']);?></div>
 <?php if(intval($data->imgData[0]['user_id']) === intval($userID)): ?>
 <form action="/img?name=<?=$name?>" method="POST">

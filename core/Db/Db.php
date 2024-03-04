@@ -11,37 +11,58 @@ class Db
 
     public function __construct()
     {
-        // $config = require_once 'config/db.php';
+
         // foreach (PDO::getAvailableDrivers() as $driver) {
         //     echo $driver . PHP_EOL;
         // }
-        $this->db = new PDO("sqlite:" . APP_PATH. APP_CONFIG['database']);
+        $this->db = new PDO("sqlite:" . APP_PATH . APP_CONFIG['database']);
     }
 
-    public function query($sql)
+    public function query($sql, $params = [])
     {
-        $this->db->exec( 'PRAGMA foreign_keys = ON;' );
-        $query = $this->db->query($sql);
-        return $query;
+        $this->db->exec('PRAGMA foreign_keys = ON;');
+        $stmt = $this->db->prepare($sql);
+        if (!empty($params)) {
+            foreach ($params as $key => $value) {
+                $stmt->bindValue(':' . $key, $value);
+            }
+        }
+        $stmt->execute();
+        return $stmt;
     }
 
-    public function row($sql)
+    public function row($sql, $params = [])
     {
-        $result = $this->query($sql);
+        $result = $this->query($sql, $params);
         return $result->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function column($sql)
+    public function column($sql, $params = [])
     {
-        $result = $this->query($sql);
+        $result = $this->query($sql, $params);
         return $result->fetchColumn();
     }
 
-    public function insert($sql) {
-        $this->db->exec( 'PRAGMA foreign_keys = ON;' );
-        $insert = $this->db->query($sql);
+    public function insert($sql, $params = [])
+    {
+        $this->db->exec('PRAGMA foreign_keys = ON;');
+        $stmt = $this->db->prepare($sql);
+        if (!empty($params)) {
+            foreach ($params as $key => $value) {
+                $stmt->bindValue(':' . $key, $value);
+            }
+        }
+        $stmt->execute();
         return $this->db->lastInsertId();
     }
 
+    public function beginTransaction()
+    {
+        $this->db->beginTransaction();
+    }
 
+    public function commit()
+    {
+        $this->db->commit();
+    }
 }

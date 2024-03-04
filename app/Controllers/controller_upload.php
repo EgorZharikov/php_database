@@ -7,7 +7,8 @@ class Controller_Upload extends Controller
     function action_index()
     {
         $userdata = $this->model->check_user();
-        $model_profile = new Model_Upload;
+        $data = new Model_Upload;
+        $this->view->generate('account/upload_view', 'template_view', $userdata, $data);
     }
 
 }

@@ -11,7 +11,9 @@ class Session
     public function __construct(string $cookieTime = '+7 days')
     {
         $this->cookieTime = strtotime($cookieTime);
+        if(!isset($_SESSION)) {
         session_cache_limiter(false);
+        }
     }
 
 

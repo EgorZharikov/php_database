@@ -6,7 +6,7 @@
                  <img class="mb-4" src="/images/logo.png" alt="" width="72" height="57">
                  <h3 class="h3 mb-3 fw-normal">Please sign in</h3>
              </div>
-             <form name="signin-form" action="" method="post">
+             <form name="signin-form" action="signin" method="post">
                  <div class="mb-3">
                      <label for="inputLogin" class="form-label">Login</label>
                      <input type="text" name="username" class="form-control" id="inputLogin">

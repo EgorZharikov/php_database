@@ -1,10 +1,3 @@
-<?php
-if(isset($_SESSION['upload_errors'])) {
-   $fail = $_SESSION['upload_errors'];
-} else {
-    $fail = '';
-}
-?>
 <div class="container col-sm-5">
     <div class="row profile-card ">
         <div class="col border border-primary-subtle align-items-center">
@@ -22,9 +15,7 @@ if(isset($_SESSION['upload_errors'])) {
                         </div>
             </div>
             </form>
-            <div class="alert alert-danger mt-3 <?php if ($fail === '') echo 'collapse' ?>" role="alert"> <?php echo $fail ?>
-                 </div>
-            <form method="post" action="">
+            <form method="post" action="profile">
                 <button type="submit" name="signout" class="btn btn-primary m-3">Выйти</button>
             </form>
         </div>

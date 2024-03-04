@@ -8,35 +8,36 @@ use App\Core\Session\Session;
 
 class Model_Upload extends Model
 {
-
+    public $errors;
     function __construct()
     {
         
-        $uploadDir = APP_PATH . '/' . APP_CONFIG['INDEX_DIR'] . '/' . APP_CONFIG['UPLOAD_DIR'];
+        $uploadDir = APP_PATH . APP_CONFIG['UPLOAD_DIR'];
         $upload_data = $this->get_uploaded_file($uploadDir);
         $session = new Session();
+
 
         if (empty($upload_data['errors'])) {
             $file_name = $upload_data['file_name'];
             $timestamp  = time();
-            $userId = intval($session->get('id'));
+            $userID = intval($session->get('id'));
             $db = new Db();
-            $sql = "INSERT INTO images (name) VALUES ('$file_name')";
-            $db->query($sql);
-            $sql = "SELECT id FROM images WHERE name = '$file_name'";
-            $img_id = $db->column($sql);
-            $sql = "INSERT INTO user_actions (user_id, image_id, timestamp) VALUES ($userId, $img_id, $timestamp)";
-            $db->query($sql);
-            if ($session->get('upload_errors')) {
-                $session->destroy('upload_errors');
-            }
+            $params = ['file_name' => $file_name];
+            $db->beginTransaction();
+            $sql = "INSERT OR ROLLBACK INTO images (name) VALUES (:file_name)";
+            $imgID = $db->insert($sql, $params);
+            $params = ['userID' => $userID,
+                        'imgID' => $imgID,
+                        'timestamp' => $timestamp];
+            $sql = "INSERT OR ROLLBACK INTO user_actions (user_id, image_id, timestamp) VALUES (:userID, :imgID, :timestamp)";
+            $db->query($sql, $params);
+            $db->commit();
             header('Location: /main');
             exit;
             
         } else {
-            $session->set('upload_errors', $upload_data['errors']);
-            header('Location: /account/profile');
-            exit;
+            $this->errors = $upload_data['errors'];
+            
         }
     }
 
@@ -46,7 +47,7 @@ class Model_Upload extends Model
         if (!empty($_FILES)) {
   
                 $fileName = $_FILES['files']['name'][0];
-         
+                $errors = '';
                 if ($_FILES['files']['size'][0] > APP_CONFIG['UPLOAD_MAX_SIZE']) {
                     $errors = 'Недопустимый размер файла ' . $fileName . '<br>';
                 }

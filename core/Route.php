@@ -15,11 +15,11 @@ class Route
 		$routes = explode('/', $routes);
 
 		// получаем имя контроллера
-		if (isset($routes[0])) {
+		if (!empty($routes[0])) {
 			$controller_name = $routes[0];
 		}
 		// получаем метод контроллера
-		if (isset($routes[1])) {
+		if (!empty($routes[1])) {
 			$action_name = $routes[1];
 		}
 		// добавляем префиксы
