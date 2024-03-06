@@ -1,7 +1,7 @@
 <?php
 if (isset($username)) {
-$collapse = 'collapse';
-} else { 
+    $collapse = 'collapse';
+} else {
     $username = '';
     $collapse = '';
 }
@@ -44,8 +44,8 @@ $collapse = 'collapse';
                         <img src="/images/user.png" alt="Logo" width="20" height="17" class="d-inline-block align-text-top">
                         <?php echo $username ?></a>
 
-                        <a href="/account/signin" class="btn btn-outline-dark <?php echo $collapse ?> ">Sign in</a>
-                    
+                    <a href="/account/signin" class="btn btn-outline-dark <?php echo $collapse ?> ">Sign in</a>
+
                 </div>
             </div>
         </nav>
@@ -55,7 +55,7 @@ $collapse = 'collapse';
 </body>
 
 <footer>
-    <div class="container position-absolute bottom-0 start-50 translate-middle-x">
+    <div class="container">
         <div class="links">
             <a href="#">Контакты</a>
             <a href="#">О нас</a>

@@ -12,18 +12,20 @@ class Model_Img
 
     public function __construct()
     {
-        $imgName = $_GET["name"];
-        if (!file_exists(APP_PATH . APP_CONFIG['UPLOAD_DIR'] . $imgName)) {
+        if (!isset($_GET["name"]) or !file_exists(APP_PATH . APP_CONFIG['UPLOAD_DIR'] . $_GET["name"])) {
             $host = 'http://' . $_SERVER['HTTP_HOST'] . '/';
             header('HTTP/1.1 404 Not Found');
             header("Status: 404 Not Found");
             header('Location:' . $host . '404');
+            exit;
         }
 
 
         $db = new Db();
-        $sql = "SELECT U.login, U.id AS user_id, UA.timestamp, I.id AS image_id, I.name FROM users AS U INNER JOIN user_actions AS UA ON U.id = UA.user_id INNER JOIN images AS I ON UA.image_id = I.id WHERE I.name = '$imgName' AND UA.comment_id IS NULL";
-        $tmpImgData =  $db->row($sql);
+        $imgName = $_GET["name"];
+        $params = ['imgName' => $imgName];
+        $sql = "SELECT U.login, U.id AS user_id, UA.timestamp, I.id AS image_id, I.name FROM users AS U INNER JOIN user_actions AS UA ON U.id = UA.user_id INNER JOIN images AS I ON UA.image_id = I.id WHERE I.name = :imgName AND UA.comment_id IS NULL";
+        $tmpImgData =  $db->row($sql, $params);
         $imgID = intval($tmpImgData[0]["image_id"]);
 
         if (isset($_POST['remove_comment'])) {
